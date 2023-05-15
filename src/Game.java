@@ -8,9 +8,12 @@
 
 
 
+import jdk.nashorn.internal.ir.CaseNode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
     public static void main(String[] args) {
@@ -30,8 +33,10 @@ class Dastan {
     protected Random rGen = new Random();
 
     public Dastan(int r, int c, int noOfPieces ){
+
         players.add(new Player("Player One", 1));
         players.add(new Player("Player Two", -1));
+        // Task1 createCustomPlayers();
         createMoveOptions();
         noOfRows = r;
         noOfColumns = c;
@@ -41,6 +46,30 @@ class Dastan {
         createPieces(noOfPieces);
         currentPlayer = players.get(0);
     }
+    /* task 1
+    public void createCustomPlayers(){
+        Scanner input =new Scanner(System.in);
+        System.out.println("enter player 1 name:");
+        String player1Name = input.next();
+        String player2Name = " ";
+        while (true) {
+            System.out.println("enter player 2 name:");
+            String player2NameToAdd = input.next();
+            if(!player1Name.equals(player2NameToAdd)){
+                player2Name= player2NameToAdd;
+                break;
+            }
+            else{
+                System.out.println("name is the same as players 1 ");
+            }
+        }
+        players.add(new Player(player1Name, 1));
+        players.add(new Player(player2Name, -1));
+
+    }
+    task 1 end  */
+
+
 
     private void displayBoard(){
         Console.write(System.lineSeparator() + "   ");
@@ -225,6 +254,7 @@ class Dastan {
         displayFinalResult();
     }
 
+
     private void updateboard(int startSquareReference, int finishSquareReference) {
         board.get(getIndexOfSquare(finishSquareReference)).setPiece(board.get(getIndexOfSquare(startSquareReference)).removePiece());
     }
@@ -278,7 +308,57 @@ class Dastan {
         moveOptionOffer.add("cuirassier");
         moveOptionOffer.add("ryott");
         moveOptionOffer.add("faujdar");
+        // task 2 moveOptionOffer.add("Faris");
+        // task 3 moveOptionOffer.add("sarukh");
     }
+
+
+    /*task 2
+    private MoveOption createFarisMoveOption(int direction){
+        MoveOption newMoveOption = new MoveOption("Faris");
+        Move newMove = new Move(2,1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(2,-1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(-2,1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(-2,-1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(1,2);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(1,-2);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(-1,2);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(-1,-2);
+        newMoveOption.addToPossibleMoves(newMove);
+        return newMoveOption;
+
+
+    }*/
+
+
+    /* task 3 private MoveOption createSarukhMoveOption(int direction) {
+        MoveOption newMoveOption = new MoveOption("sarukh");
+        Move newMove = new Move(0, 1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(0, -1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(1 * direction, 1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(1*direction, -1);
+        newMoveOption.addToPossibleMoves(newMove);
+        newMove = new Move(2*direction, 0);
+        newMoveOption.addToPossibleMoves(newMove);
+        return newMoveOption;
+    }
+
+     */
+
+
+
+
+
 
     private MoveOption createRyottMoveOption(int direction) {
         MoveOption newMoveOption  = new MoveOption("ryott");
@@ -361,6 +441,11 @@ class Dastan {
                 return createChowkidarMoveOption(direction);
             case "ryott":
                 return createRyottMoveOption(direction);
+            // task 3 case "sarukh":
+                // task 3 return createSarukhMoveOption(direction);
+
+            // task 2 case "faris":
+                // task 2 return createFarisMoveOption(direction);
             case "faujdar":
                 return createFaujdarMoveOption(direction);
             case "jazair":
@@ -372,11 +457,15 @@ class Dastan {
 
     private void createMoveOptions(){
         players.get(0).addToMoveOptionQueue(createMoveOption("ryott", 1));
+        // task 2 players.get(0).addToMoveOptionQueue(createMoveOption("faris", 1));
+        // task 3 players.get(0).addToMoveOptionQueue(createMoveOption("sarukh", 1));
         players.get(0).addToMoveOptionQueue(createMoveOption("chowkidar", 1));
         players.get(0).addToMoveOptionQueue(createMoveOption("cuirassier", 1));
         players.get(0).addToMoveOptionQueue(createMoveOption("faujdar", 1));
         players.get(0).addToMoveOptionQueue(createMoveOption("jazair", 1));
         players.get(1).addToMoveOptionQueue(createMoveOption("ryott", -1));
+        // task 2 players.get(1).addToMoveOptionQueue(createMoveOption("faris", -1));
+        // task 3 players.get(1).addToMoveOptionQueue(createMoveOption("sarukh", -1));
         players.get(1).addToMoveOptionQueue(createMoveOption("chowkidar", -1));
         players.get(1).addToMoveOptionQueue(createMoveOption("jazair", -1));
         players.get(1).addToMoveOptionQueue(createMoveOption("faujdar", -1));
@@ -572,11 +661,17 @@ class Player {
     private int direction, score;
     private MoveOptionQueue queue = new MoveOptionQueue();
 
+
     public Player(String n, int d) {
         score = 100;
         name = n;
         direction = d;
+
     }
+
+
+
+
 
     public boolean sameAs(Player APlayer) {
         if (APlayer == null) {
@@ -624,4 +719,7 @@ class Player {
         MoveOption temp = queue.getMoveOptionInPosition(pos - 1);
         return temp.checkIfThereIsAMoveToSquare(startSquareReference, finishSquareReference);
     }
+
+
+
 }
